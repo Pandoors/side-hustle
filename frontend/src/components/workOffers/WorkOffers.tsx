@@ -1,8 +1,37 @@
-import React from "react";
+import React, { ReactFragment } from "react";
 import Offer from "./jobCard/JobCard";
 import JobCard from "./jobCard/JobCard";
+import { useStateProvider } from "@/context/State";
+import { JsxElement } from "typescript";
+
+interface offer {
+  "offerId": Number,
+  "description": string,
+  "location": string,
+  "startDate": string,
+  "endDate": string,
+  "jobType": string,
+  "formattedDuration": string,
+  "wage": string,
+  "longitude": Number,
+  "latitude": Number
+}
+
 
 function WorkOffers() {
+  const state = useStateProvider()
+  const renderJobCards = ()=>{
+
+    let jobCards: ReactFragment[]; 
+    if(state && state.length > 0){
+      jobCards = state.map((el:offer, id:number)=>{
+        return <JobCard params={el}></JobCard>
+    })
+    return jobCards
+    }
+    return <></>
+  }
+
   return (
     <div className="work_offers">
       <div
@@ -17,17 +46,7 @@ function WorkOffers() {
         Oferty pracy (2137)
       </div>
       <div className="job_cards">
-      <JobCard></JobCard>
-      <JobCard></JobCard>
-      <JobCard></JobCard>
-      <JobCard></JobCard>
-
-      <JobCard></JobCard>
-
-      <JobCard></JobCard>
-
-      <JobCard></JobCard>
-
+        {renderJobCards()}
       </div>
       
     </div>

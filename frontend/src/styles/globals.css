@@ -84,7 +84,7 @@ body {
   width: 618px;
   left: 0px;
   top: 36px;
-  height: 1200px;
+  height: 680px;
   overflow: scroll;
   border-radius: 24px;
   overflow-y: visible;
@@ -145,7 +145,6 @@ body {
 }
 
 .job_card_title_text {
-  width: 215px;
   height: 27px;
 
   /* Body 1 semi */
@@ -217,8 +216,7 @@ body {
   padding: 8px;
   gap: 8px;
 
-  width: 146px;
-  height: 40px;
+  height: 32px;
 
   background: rgba(59, 57, 162, 0.05);
   border-radius: 12px;
@@ -231,7 +229,6 @@ body {
 }
 
 .job_card_badge_text {
-  width: 102px;
   height: 24px;
 
   /* Body 2 */

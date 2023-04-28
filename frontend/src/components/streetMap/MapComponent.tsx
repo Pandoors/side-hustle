@@ -40,7 +40,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ markers }) => {
   };
 
   return (
-      <MapContainer style={{ height: '500px', width: '100%' }} center={currentLocation || defaultCenter} zoom={13}>
+      <MapContainer style={{ height: '740px', width: '90%', margin: "2rem 0rem 0rem 3rem" }} center={currentLocation || defaultCenter} zoom={13}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

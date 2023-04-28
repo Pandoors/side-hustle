@@ -8,17 +8,18 @@ export const StateProvider = ({ children }: { children: React.ReactNode }) => {
   const [jobOffers, setJobOffers] = useState<any>();
 
   useEffect(() => {
-    // let obj;
-    // fetch("http://localhost:8080/api/v1/offer/list")
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     obj = data;
-    //   });
-    // console.log(obj)
+    let obj;
+    fetch("http://localhost:8080/api/v1/offer/list")
+      .then((res) => res.json())
+      .then((data) => {
+        obj = data;
+        setJobOffers(data)
+        console.log(data)
+      });
   }, []);
 
   return (
-    <StateContext.Provider value={{ jobOffers }}>
+    <StateContext.Provider value={jobOffers}>
       {children}
     </StateContext.Provider>
   );
