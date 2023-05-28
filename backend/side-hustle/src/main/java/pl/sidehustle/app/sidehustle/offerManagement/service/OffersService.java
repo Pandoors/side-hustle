@@ -1,9 +1,15 @@
 package pl.sidehustle.app.sidehustle.offerManagement.service;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.sidehustle.app.sidehustle.accountManagement.model.User;
+import pl.sidehustle.app.sidehustle.accountManagement.repository.UserRepository;
 import pl.sidehustle.app.sidehustle.enums.JobType;
 import pl.sidehustle.app.sidehustle.exceptions.BadRequestException;
 import pl.sidehustle.app.sidehustle.offerManagement.dto.OfferDTO;
@@ -19,6 +25,10 @@ import java.util.List;
 public class OffersService {
     private int defaultSize = 10;
     private int maxSize = 10;
+
+    @Autowired
+    private UserRepository userRepository;
+
 
     Logger logger = LoggerFactory.getLogger(OffersService.class);
 
