@@ -5,15 +5,19 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import pl.sidehustle.app.sidehustle.accountManagement.model.User;
+import pl.sidehustle.app.sidehustle.offerManagement.service.OffersService;
 
 import java.util.List;
 
 @Repository
 public class UserRepository {
 
+    Logger logger = LoggerFactory.getLogger(UserRepository.class);
 
     @PersistenceContext
     EntityManager entityManager;
@@ -22,7 +26,7 @@ public class UserRepository {
         try {
             return entityManager.createNamedQuery("User.userById", User.class).setParameter("id", id).getSingleResult();
         } catch (NoResultException | NonUniqueResultException e) {
-            System.out.println("not found");
+            logger.warn("not found");
             return null;
         }
     }
