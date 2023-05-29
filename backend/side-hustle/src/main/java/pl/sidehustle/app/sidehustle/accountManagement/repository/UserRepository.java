@@ -1,10 +1,10 @@
 package pl.sidehustle.app.sidehustle.accountManagement.repository;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
-import jakarta.persistence.NonUniqueResultException;
-import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +22,20 @@ public class UserRepository {
     @PersistenceContext
     EntityManager entityManager;
 
-     public User getUserByUsername(Long id) {
+     public User getUserByUsername(String username) {
         try {
-            return entityManager.createNamedQuery("User.userById", User.class).setParameter("id", id).getSingleResult();
+            return entityManager.createNamedQuery("User.userByUsername", User.class).setParameter("username", username).getSingleResult();
         } catch (NoResultException | NonUniqueResultException e) {
-            logger.warn("not found");
             return null;
         }
     }
-
+    public User getUserByMail(String mail) {
+        try {
+            return entityManager.createNamedQuery("User.userByMail", User.class).setParameter("mail", mail).getSingleResult();
+        } catch (NoResultException | NonUniqueResultException e) {
+            return null;
+        }
+    }
     @Transactional
     public void deleteUser(User user){
          entityManager.remove(user);
