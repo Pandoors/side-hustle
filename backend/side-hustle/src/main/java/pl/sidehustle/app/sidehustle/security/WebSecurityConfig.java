@@ -20,10 +20,7 @@ import pl.sidehustle.app.sidehustle.security.service.UserDetailsServiceImpl;
 
 @Configuration
 //@EnableWebSecurity
-@EnableGlobalMethodSecurity(
-        // securedEnabled = true,
-        // jsr250Enabled = true,
-        prePostEnabled = true)
+
 public class WebSecurityConfig  { //  {extends WebSecurityConfigurerAdapter
     @Autowired
     UserDetailsServiceImpl userDetailsService;
@@ -84,7 +81,7 @@ public class WebSecurityConfig  { //  {extends WebSecurityConfigurerAdapter
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/api/v1/auth/**").permitAll()
+                .authorizeHttpRequests().requestMatchers("/api/v1/auth/**").permitAll()
 //                .antMatchers("/api/test/**", "/api/record/**").permitAll()
                 .anyRequest().authenticated();
 

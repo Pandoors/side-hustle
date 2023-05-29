@@ -1,6 +1,6 @@
 package pl.sidehustle.app.sidehustle.accountManagement.controller.v1;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
