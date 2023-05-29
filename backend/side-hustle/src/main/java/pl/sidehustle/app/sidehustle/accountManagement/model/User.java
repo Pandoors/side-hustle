@@ -18,9 +18,14 @@ import java.util.Set;
 @Table(name = "users")
 @Access(AccessType.FIELD)
 @NamedQueries({
+//        todo take into consideration date of deleting
         @NamedQuery(
-                name = "User.userById",
-                query = "SELECT u FROM User u WHERE u.id = :id"
+                name = "User.userByUsername",
+                query = "SELECT u FROM User u WHERE u.username = :username"
+        ),
+        @NamedQuery(
+                name = "User.userByMail",
+                query = "SELECT u FROM User u WHERE u.email = :mail"
         )
 })
 public class User {
@@ -48,6 +53,9 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "username")
+    private String username;
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private CV cv;
 
@@ -63,5 +71,11 @@ public class User {
 
 
     public User() {
+    }
+
+    public User(String email, String username, String password) {
+        this.email = email;
+        this.username = username;
+        this.password = password;
     }
 }
