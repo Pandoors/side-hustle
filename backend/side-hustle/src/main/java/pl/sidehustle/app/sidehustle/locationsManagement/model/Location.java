@@ -3,8 +3,10 @@ package pl.sidehustle.app.sidehustle.locationsManagement.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import pl.sidehustle.app.sidehustle.offerManagement.model.Offer;
 
 import java.sql.Date;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -37,6 +39,9 @@ public class Location {
 
     @Column(name = "name")
     private String name;
+
+    @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
+    private Set<Offer> offers;
 
     public Location() {
     }

@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -29,6 +31,9 @@ public class Role {
 
     @Column(name = "is_customer")
     private boolean isCustomer;
+
+    @OneToMany(mappedBy = "roleId", fetch = FetchType.LAZY)
+    private Set<User> users;
 
     public Role() {
     }

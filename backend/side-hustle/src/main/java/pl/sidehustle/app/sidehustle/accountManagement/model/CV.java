@@ -33,8 +33,12 @@ public class CV {
     @Column(name = "educational_level")
     private String educationalLevel;
 
-    @Column(name = "contant_enail")
+    @Column(name = "contact_email")
     private String contactEmail;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     public CV() {
     }

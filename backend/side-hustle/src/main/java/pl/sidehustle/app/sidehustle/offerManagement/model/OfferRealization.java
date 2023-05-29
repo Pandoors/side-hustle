@@ -1,8 +1,10 @@
 package pl.sidehustle.app.sidehustle.offerManagement.model;
 
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import pl.sidehustle.app.sidehustle.accountManagement.model.User;
 
 import java.sql.Date;
 
@@ -13,11 +15,9 @@ import java.sql.Date;
 @Access(AccessType.FIELD)
 public class OfferRealization {
 
-    @Id
-    private Long offer_id;
-
-    @Id
-    private Long worker_id;
+    @EmbeddedId
+    @EqualsAndHashCode.Include
+    private OfferRealizationPK id;
 
     @Column(name = "taken")
     private Date taken;
@@ -27,6 +27,14 @@ public class OfferRealization {
 
     @Column(name = "active")
     private boolean active = true;
+
+    @ManyToOne
+    @JoinColumn(name = "offer_id", insertable = false, updatable = false)
+    private Offer offer;
+
+    @ManyToOne
+    @JoinColumn(name = "worker_id", insertable = false, updatable = false)
+    private User worker;
 
     public OfferRealization() {
 
