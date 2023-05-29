@@ -8,7 +8,7 @@ import lombok.ToString;
 import pl.sidehustle.app.sidehustle.offerManagement.model.Offer;
 import pl.sidehustle.app.sidehustle.offerManagement.model.OfferRealization;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.Set;
 
 @ToString

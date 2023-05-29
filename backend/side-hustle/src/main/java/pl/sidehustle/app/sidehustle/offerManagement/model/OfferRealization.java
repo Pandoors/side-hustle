@@ -6,7 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.sidehustle.app.sidehustle.accountManagement.model.User;
 
-import java.sql.Date;
+import java.util.Date;
+
 
 @Entity
 @Getter

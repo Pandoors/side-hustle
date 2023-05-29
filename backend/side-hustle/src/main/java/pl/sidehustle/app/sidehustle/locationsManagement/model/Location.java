@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.sidehustle.app.sidehustle.offerManagement.model.Offer;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
