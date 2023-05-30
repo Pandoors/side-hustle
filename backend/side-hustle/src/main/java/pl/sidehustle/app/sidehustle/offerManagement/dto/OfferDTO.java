@@ -1,10 +1,8 @@
 package pl.sidehustle.app.sidehustle.offerManagement.dto;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Date;
+import pl.sidehustle.app.sidehustle.offerManagement.model.Offer;
 @Getter
 @Setter
 //@NoArgsConstructor
@@ -16,7 +14,6 @@ public class OfferDTO {
     private String startDate;
     private String endDate;
     private String jobType;
-    private String formattedDuration;
     private String wage;
     private Double longitude;
     private Double latitude;
@@ -28,9 +25,20 @@ public class OfferDTO {
         this.startDate = startDate;
         this.endDate = endDate;
         this.jobType = jobType;
-        this.formattedDuration = formattedDuration;
         this.wage = wage;
         this.longitude = longitude;
         this.latitude = latitude;
+    }
+
+    public OfferDTO(Offer offer) {
+        this.offerId = offer.getId();
+        this.description = offer.getDescription();
+        this.location = offer.getLocation().getCity();
+        this.startDate = "";
+        this.endDate = "";
+        this.jobType = offer.getOfferType();
+        this.wage = offer.getPayment().toString();
+        this.longitude = offer.getLocation().getLongitude();
+        this.latitude = offer.getLocation().getLatitude();
     }
 }

@@ -15,6 +15,24 @@ import java.util.Set;
 @Setter
 @Table(name = "offers")
 @Access(AccessType.FIELD)
+@NamedQueries({
+        @NamedQuery(
+                name = "Offer.offerById",
+                query = "SELECT o FROM Offer o WHERE o.id = :id"
+        ),
+        @NamedQuery(
+                name = "Offer.offerByOwnerId",
+                query = "SELECT o FROM Offer o WHERE o.ownerId = :id"
+        ),
+        @NamedQuery(
+                name = "Offer.offerByLocationId",
+                query = "SELECT o FROM Offer o WHERE o.locationId = :id"
+        ),
+        @NamedQuery(
+                name = "Offer.offerList",
+                query = "SELECT o FROM Offer o"
+        ),
+})
 public class Offer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
