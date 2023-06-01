@@ -35,13 +35,12 @@ public class OffersController {
         return offersService.getOfferList(offset, size);
     }
 
-    @GetMapping("/list/{id}")
+    @GetMapping("/{id}")
     public OfferDTO getOffer(@PathVariable Long id) {
         logger.info("Received getOffer request");
         return offersService.getOfferById(id);
     }
 
-    // get all users offers
     @GetMapping("/list/user/{id}")
     public List<OfferDTO> getOffersByUserId(@PathVariable Long id) {
         logger.info("Received getOffersByUserId request");

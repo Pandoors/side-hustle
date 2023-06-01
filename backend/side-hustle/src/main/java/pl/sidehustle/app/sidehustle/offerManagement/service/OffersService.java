@@ -86,6 +86,4 @@ public class OffersService {
     public List<OfferDTO> getOffersByLocationId(Long locationId) {
         return offerRepository.getOffersByLocationId(locationId).stream().map(OfferDTO::new).toList();
     }
-
-
 }
