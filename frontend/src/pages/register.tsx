@@ -11,11 +11,6 @@ import registerSchema from '@/schemas/registerSchema'
 import { useStateProvider } from '@/context/State'
 
 
-const MapComponent = dynamic(() => import('@/components/streetMap/MapComponent'), {
-  ssr: false, // Disable server-side rendering for the MapComponent
-});
-const inter = Inter({ subsets: ['latin'] })
-
 export default function Register() {
 
     const state = useStateProvider()

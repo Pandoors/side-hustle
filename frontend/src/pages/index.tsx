@@ -27,7 +27,7 @@ export default function Home() {
     }
     console.log(markersList)
     setMarkers(markersList)
-  }, [state])
+  }, [])
 
   return (
     <>

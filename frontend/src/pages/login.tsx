@@ -6,18 +6,30 @@ import Filters from '@/components/filters/Filters'
 import WorkOffers from '@/components/workOffers/WorkOffers'
 import dynamic from 'next/dynamic';
 import auth_banner from "../assets/images/auth_banner.png";
+import { useFormik } from 'formik'
+import loginSchema from '@/schemas/loginSchema'
+import { useStateProvider } from '@/context/State'
 
 
-const MapComponent = dynamic(() => import('@/components/streetMap/MapComponent'), {
-  ssr: false, // Disable server-side rendering for the MapComponent
-});
-const inter = Inter({ subsets: ['latin'] })
+
 
 export default function Login() {
-  const markers = [
-    { lat: 50.068693, lng: 19.923657 },
-  
-  ];
+ 
+  const {login} = useStateProvider()
+
+  const form = useFormik({
+    initialValues: {
+      password: "",
+      login: "",
+    },
+    validationSchema: loginSchema,
+    onSubmit: async (values,) => {
+      console.log(values)
+      login(values)
+
+    },
+  });
+
   return (
     <div className='login_page'>
         <div>
@@ -34,7 +46,8 @@ export default function Login() {
                 Login
             </div>
             <div>
-                <input className='auth_input'></input>
+                <input className='auth_input'  value={form.values.login}
+                onChange={form.handleChange("login")} ></input>
             </div>
         </div>
         <div className='auth_input_div'>
@@ -42,11 +55,11 @@ export default function Login() {
                 Hasło
             </div>
             <div>
-                <input className='auth_input' type='password'></input>
+                <input className='auth_input' value={form.values.password} onChange={form.handleChange("password")} type='password'></input>
             </div>
         </div>
         <div className='auth_action_button'>
-            <div className='auth_action_button_text'>Zaloguj się</div>
+            <div className='auth_action_button_text' onClick={()=>form.handleSubmit()}>Zaloguj się</div>
         </div>
         <div className='auth_description'>
             Nie masz konta? <span className='auth_description_highlited'>{" "} Zarejestruj się</span>
