@@ -48,15 +48,236 @@ body {
   background: #fefeff;
 }
 
+.login_page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+.auth_input_div {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  height: 100px;
+  margin: 0px;
+  padding: 0px;
+}
+
+.auth_input {
+  box-sizing: border-box;
+
+  /* Auto layout */
+
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 12px;
+  gap: 10px;
+
+  width: 424px;
+  height: 48px;
+  border: 1px solid #b0b2b2;
+  border-radius: 8px;
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+}
+
+.auth_input_description {
+  width: 39px;
+  height: 20px;
+  margin-bottom: 5px;
+  float: left;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  /* identical to box height, or 143% */
+  text-align: left;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.2px;
+
+  /* Black */
+
+  color: #121212;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.auth_action_button {
+  /* Frame 1242 */
+
+  /* Auto layout */
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 32px;
+  gap: 10px;
+  box-sizing: border-box;
+  width: 163px;
+  height: 51px;
+  position: relative;
+  /* Primary */
+  cursor: pointer;
+  background: #3b39a2;
+  border-radius: 32px;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.auth_action_button_text {
+  width: 99px;
+  height: 27px;
+
+  /* Body 1 semi */
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 27px;
+  /* identical to box height */
+
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  /* White */
+  
+  color: #ffffff;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.auth_description{
+  height: 27px;
+
+  /* Body1 */
+  margin-top: 100px;
+
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 27px;
+  /* identical to box height */
+
+  display: flex;
+  align-self: center;
+  text-align: center;
+  color: #000000;
+
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+.auth_description_highlited{
+  width: 131px;
+  height: 27px;
+  margin-left: 5px;
+  /* Body 1 bold */
+
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 27px;
+  /* identical to box height */
+  text-align: center;
+
+  display: flex;
+
+  /* Primary */
+
+  color: #3B39A2;
+
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
 .header {
   width: 100%;
   height: 64px;
   margin: 0px;
   padding: 0px;
   /* Backgroud */
+  display: flex;
+  flex-direction: row;
   background: #fefeff;
 
   box-shadow: 0px 2px 6px rgba(59, 57, 162, 0.1);
+}
+
+.auth_header_buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0px;
+  gap: 24px;
+  width: 100%;
+  height: 64px;
+  margin: 0px;
+  padding: 0px;
+  /* Backgroud */
+  display: flex;
+  flex-direction: row;
+  margin-right: 4rem;
+}
+
+.header_button {
+  width: 120px;
+  height: 27px;
+
+  /* Body 1 bold */
+
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 27px;
+  /* identical to box height */
+  cursor: pointer;
+
+  /* Primary */
+
+  color: #3b39a2;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+.header_button > a {
+  text-decoration: none;
+  color: #3b39a2;
 }
 
 .filters {
@@ -81,13 +302,14 @@ body {
   padding: 12px 0px;
   gap: 12px;
   margin-left: 70px;
-  width: 618px;
+  width: 680px;
   left: 0px;
   top: 36px;
   height: 680px;
   overflow: scroll;
   border-radius: 24px;
-  overflow-y: visible;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .job_card {
@@ -114,11 +336,16 @@ body {
   border-radius: 24px;
 
   /* Inside auto layout */
-
+  cursor: pointer;
   flex: none;
   order: 0;
   align-self: stretch;
   flex-grow: 0;
+}
+
+.job_card:hover{
+  box-shadow: 0px 2px 5px rgba(59, 57, 162, 0.2);
+  background-color: #f1f1f1;
 }
 
 .job_card_title {
@@ -132,7 +359,7 @@ body {
   align-items: flex-start;
   padding: 0px;
   gap: 222px;
-
+  position: relative;
   width: 570px;
   height: 27px;
 
@@ -172,7 +399,7 @@ body {
 
   width: 56px;
   height: 27px;
-
+  right: 25px;
   /* Body 1 semi */
 
   font-family: "Poppins";
@@ -183,7 +410,7 @@ body {
   /* identical to box height */
 
   /* Primary */
-
+  position: absolute;
   color: #3b39a2;
 
   /* Inside auto layout */

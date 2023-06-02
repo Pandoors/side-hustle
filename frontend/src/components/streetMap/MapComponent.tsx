@@ -15,6 +15,7 @@ L.Icon.Default.mergeOptions({
 interface Coordinates {
   lat: number;
   lng: number;
+  description?: string;
 }
 
 interface MapComponentProps {
@@ -52,7 +53,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ markers }) => {
         )}
         {markers.map((marker, index) => (
           <Marker key={index} position={marker}>
-            <Popup>Marker {index + 1}</Popup>
+            <Popup>{marker.description}</Popup>
           </Marker>
         ))}
       </MapContainer>
