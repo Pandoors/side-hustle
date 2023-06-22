@@ -24,6 +24,10 @@ import java.util.Set;
                 query = "SELECT u FROM User u WHERE u.username = :username"
         ),
         @NamedQuery(
+                name = "User.userByUsernameWithRole",
+                query = "SELECT u FROM User u LEFT JOIN FETCH u.role r WHERE u.username = :username AND u.isDeleted = false"
+        ),
+        @NamedQuery(
                 name = "User.userById",
                 query = "SELECT u FROM User u WHERE u.id = :id"
         ),

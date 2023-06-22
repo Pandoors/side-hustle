@@ -29,6 +29,13 @@ public class UserRepository {
             return null;
         }
     }
+    public User getUserByUsernameWithRole(String username) {
+        try {
+            return entityManager.createNamedQuery("User.userByUsernameWithRole", User.class).setParameter("username", username).getSingleResult();
+        } catch (NoResultException | NonUniqueResultException e) {
+            return null;
+        }
+    }
     public User getUserById(Long userId) {
         try {
             return entityManager.createNamedQuery("User.userById", User.class).setParameter("id", userId).getSingleResult();

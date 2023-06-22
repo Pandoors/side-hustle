@@ -9,6 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import pl.sidehustle.app.sidehustle.accountManagement.model.Role;
+import pl.sidehustle.app.sidehustle.accountManagement.model.RoleLevel;
 import pl.sidehustle.app.sidehustle.accountManagement.model.User;
 import pl.sidehustle.app.sidehustle.accountManagement.repository.RoleRepository;
 import pl.sidehustle.app.sidehustle.accountManagement.repository.UserRepository;
@@ -19,7 +21,6 @@ import pl.sidehustle.app.sidehustle.security.payload.*;
 import pl.sidehustle.app.sidehustle.security.service.RefreshTokenService;
 import pl.sidehustle.app.sidehustle.security.service.UserDetailsImpl;
 
-import javax.management.relation.Role;
 import java.util.*;
 
 @RestController
@@ -61,13 +62,17 @@ public class AuthController {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
-
-
+        Role userRole = userDetails.getRole();
+        String roleLevel = RoleLevel.CUSTOMER.toString();
+        if (userRole != null) {
+            roleLevel = userRole.getRoleLevel();
+        }
         return ResponseEntity.ok(new JwtResponse(jwt,
                 refreshToken.getToken(),
                 userDetails.getId(),
                 userDetails.getUsername(),
-                userDetails.getEmail()));
+                userDetails.getEmail(),
+                roleLevel));
     }
 
     @PostMapping("/refreshtoken")
@@ -94,7 +99,7 @@ public class AuthController {
                     .body(new MessageResponse("Error: Username is already taken!"));
         }
 
-        if (userRepository.getUserByMail(signUpRequest.getEmail())!= null) {
+        if (userRepository.getUserByMail(signUpRequest.getEmail()) != null) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));

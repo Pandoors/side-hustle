@@ -24,7 +24,7 @@ public class Role {
 
     // default false
     @Column(name = "admin_access")
-    private boolean adminAccess = false;
+    private boolean adminAccess;
 
     @Column(name = "is_provider")
     private boolean isProvider;
@@ -36,5 +36,15 @@ public class Role {
     private Set<User> users;
 
     public Role() {
+    }
+
+    public String getRoleLevel(){
+        if (this.adminAccess){
+            return RoleLevel.ADMIN.toString();
+        } else if (this.isProvider){
+            return RoleLevel.PROVIDER.toString();
+        } else {
+            return RoleLevel.CUSTOMER.toString();
+        }
     }
 }
