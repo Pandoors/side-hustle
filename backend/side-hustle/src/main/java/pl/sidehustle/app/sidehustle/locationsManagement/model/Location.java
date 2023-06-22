@@ -49,6 +49,14 @@ public class Location {
 
     }
 
+    public Location(Double longitude, Double latitude, String city, String address, String district) {
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.city = city;
+        this.address = address;
+        this.district = district;
+        this.createdAt = new Date();
+    }
 
     public Location() {
     }

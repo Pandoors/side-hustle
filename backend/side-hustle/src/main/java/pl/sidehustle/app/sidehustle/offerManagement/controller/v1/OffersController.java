@@ -78,7 +78,7 @@ public class OffersController {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         User user = userDetails.getUser();
         Role role = userDetails.getRole();
-//        offersService
+        offersService.addNewOffer(offerRequestDTO, user, role);
 
         return ResponseEntity.ok(new MessageResponse("Offer added successfully"));
     }

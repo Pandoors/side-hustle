@@ -3,6 +3,8 @@ package pl.sidehustle.app.sidehustle.offerManagement.dto;
 import lombok.Getter;
 import lombok.Setter;
 import pl.sidehustle.app.sidehustle.offerManagement.model.Offer;
+import pl.sidehustle.app.sidehustle.utils.DateUtil;
+
 @Getter
 @Setter
 //@NoArgsConstructor
@@ -37,8 +39,8 @@ public class OfferDTO {
         this.description = offer.getDescription();
         this.city = offer.getLocation().getCity();
         this.location = offer.getLocation().getFullName();
-        this.startDate = "";
-        this.endDate = "";
+        this.startDate = DateUtil.formatDate(offer.getOfferStart());
+        this.endDate = DateUtil.formatDate(offer.getOfferEnd());
         this.jobType = offer.getOfferType();
         this.wage = offer.getPayment().toString() + "zł/h";
         this.longitude = offer.getLocation().getLongitude();

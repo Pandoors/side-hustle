@@ -7,6 +7,7 @@ import lombok.Setter;
 import pl.sidehustle.app.sidehustle.accountManagement.model.User;
 import pl.sidehustle.app.sidehustle.locationsManagement.model.Location;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
@@ -61,7 +62,13 @@ public class Offer {
     private Long ownerId;
 
     @Column(name = "payment")
-    private Double payment;
+    private BigDecimal payment;
+
+    @Column(name = "offer_start")
+    private Date offerStart;
+
+    @Column(name = "offer_end")
+    private Date offerEnd;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id", insertable = false, updatable = false)
@@ -75,5 +82,19 @@ public class Offer {
     private Set<OfferRealization> offerRealizations;
 
     public Offer() {
+    }
+
+    public Offer(String fullName, String offerType, String description, BigDecimal payment, Location location, User owner, Date offerStart, Date offerEnd, Long locationId, Long userId) {
+        this.createdAt = new Date();
+        this.fullName = fullName;
+        this.offerType = offerType;
+        this.description = description;
+        this.payment = payment;
+        this.location = location;
+        this.owner = owner;
+        this.offerStart = offerStart;
+        this.offerEnd = offerEnd;
+        this.locationId = locationId;
+        this.ownerId = userId;
     }
 }

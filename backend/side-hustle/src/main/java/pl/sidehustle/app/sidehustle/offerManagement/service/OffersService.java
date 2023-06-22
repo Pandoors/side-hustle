@@ -4,16 +4,29 @@ import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+import pl.sidehustle.app.sidehustle.accountManagement.model.Role;
+import pl.sidehustle.app.sidehustle.accountManagement.model.RoleLevel;
+import pl.sidehustle.app.sidehustle.accountManagement.model.User;
 import pl.sidehustle.app.sidehustle.accountManagement.repository.UserRepository;
 import pl.sidehustle.app.sidehustle.enums.JobType;
 import pl.sidehustle.app.sidehustle.exceptions.BadRequestException;
+import pl.sidehustle.app.sidehustle.locationsManagement.dto.LocationDTO;
+import pl.sidehustle.app.sidehustle.locationsManagement.model.Location;
+import pl.sidehustle.app.sidehustle.locationsManagement.repository.LocationRepository;
+import pl.sidehustle.app.sidehustle.offerManagement.dto.NewOfferRequestDTO;
 import pl.sidehustle.app.sidehustle.offerManagement.dto.OfferDTO;
+import pl.sidehustle.app.sidehustle.offerManagement.model.Offer;
 import pl.sidehustle.app.sidehustle.offerManagement.repository.OfferRepository;
+import pl.sidehustle.app.sidehustle.utils.DateUtil;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -27,6 +40,9 @@ public class OffersService {
 
     @Autowired
     private OfferRepository offerRepository;
+
+    @Autowired
+    private LocationRepository locationRepository;
 
 
     Logger logger = LoggerFactory.getLogger(OffersService.class);
@@ -56,20 +72,6 @@ public class OffersService {
         }
     }
 
-    private List<OfferDTO> offerFactory() {
-        OfferDTO offer1 = new OfferDTO(1L, "Koszenie trawy", "Prokocim", "12.04", "14.04", JobType.PHYSICAL.getType(), "4-5 h", "21zł/h", 50.00813486564785, 19.998598306804602);
-        OfferDTO offer2 = new OfferDTO(2L, "Składanie mebli", "Rybitwy", "10.04", "11.04", JobType.PHYSICAL.getType(), "6-7 h", "11zł/h", 50.04520626239646, 20.043231912485453);
-        OfferDTO offer3 = new OfferDTO(3L, "Uzupełnianie excela", "Stare Podgórze", "10.04", "10.04", JobType.MENTAL.getType(), "6-7 h", "40zł/h", 50.041623260747194, 19.944081545580133);
-        OfferDTO offer4 = new OfferDTO(4L, "Wykładanie towaru", "Kazimierz", "13.05", "13.05", JobType.PHYSICAL.getType(), "2-3 h", "112zł/h", 50.04622992803206, 19.94455976278386);
-        OfferDTO offer5 = new OfferDTO(5L, "Spacer z psem", "Mogiła", "13.03", "13.03", JobType.PHYSICAL.getType(), "0.5-1 h", "20zł/h", 50.05871689095981, 20.061722977696093);
-        OfferDTO offer6 = new OfferDTO(6L, "Pomoc przy przewozie mebli", "Czarna wieś", "05.03", "05.03", JobType.PHYSICAL.getType(), "4-5 h", "40zł/h", 50.06608472152409, 19.904070706201946);
-        OfferDTO offer7 = new OfferDTO(7L, "Pomoc przy przeprowadzce", "Dębniki", "05.03", "05.03", JobType.PHYSICAL.getType(), "5-6 h", "30zł/h", 50.047974186027126, 19.92553917491516);
-        OfferDTO offer8 = new OfferDTO(8L, "Skoszenie trawnika", "Czyżyny", "05.03", "05.03", JobType.PHYSICAL.getType(), "2-3 h", "34zł/h", 50.06867125487128, 20.00656794881595);
-        OfferDTO offer9 = new OfferDTO(9L, "Przeniesienie fortepianu", "Grzegórzki", "05.02", "05.02", JobType.PHYSICAL.getType(), "1-2 h", "64zł/h", 50.067277525799824, 19.97671217526877);
-        OfferDTO offer10 = new OfferDTO(10L, "Zamontowanie koła do samochodu", "Grzegórzki", "05.02", "05.02", JobType.PHYSICAL.getType(), "1-2 h", "24zł/h", 50.05821729960025, 19.96422703360358);
-
-        return new ArrayList<>(Arrays.asList(offer1, offer2, offer3, offer4, offer5, offer6, offer7, offer8, offer9, offer10));
-    }
 
     public Integer getOffersCount() {
         return offerRepository.getOffers().size();
@@ -86,4 +88,46 @@ public class OffersService {
     public List<OfferDTO> getOffersByLocationId(Long locationId) {
         return offerRepository.getOffersByLocationId(locationId).stream().map(OfferDTO::new).toList();
     }
+
+    public void addNewOffer(NewOfferRequestDTO offerRequestDTO , User user, Role role){
+
+        if (role == null || !Set.of(RoleLevel.PROVIDER.toString(), RoleLevel.ADMIN.toString()).contains(role.getRoleLevel())){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You need to be provider or admin in order to add offer");
+        }
+
+        if (offerRequestDTO.getLocation() != null) {
+            LocationDTO locationDTO = offerRequestDTO.getLocation();
+            Location location = new Location(
+                    locationDTO.getLongitude(),
+                    locationDTO.getLatitude(),
+                    locationDTO.getCity(),
+                    locationDTO.getAddress(),
+                    locationDTO.getDistrict());
+            locationRepository.addLocation(location);
+
+            Offer offer = null;
+            try {
+                offer = new Offer(
+                        offerRequestDTO.getFullName(),
+                        offerRequestDTO.getJobType(),
+                        offerRequestDTO.getDescription(),
+                        offerRequestDTO.getWage(),
+                        location,
+                        user,
+                        DateUtil.parseDate(offerRequestDTO.getStartDate()),
+                        DateUtil.parseDate(offerRequestDTO.getEndDate()),
+                        location.getId(),
+                        user.getId()
+                );
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            offerRepository.addOffer(offer);
+
+        } else {
+            throw new BadRequestException();
+        }
+
+    }
+
 }
