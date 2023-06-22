@@ -3,6 +3,7 @@ package pl.sidehustle.app.sidehustle.security.service;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import pl.sidehustle.app.sidehustle.accountManagement.model.Role;
 import pl.sidehustle.app.sidehustle.accountManagement.model.User;
 
 import java.util.ArrayList;
@@ -19,31 +20,36 @@ public class UserDetailsImpl implements UserDetails {
 
     private String email;
 
+    private User user;
+
+    private Role role;
+
     @JsonIgnore
     private String password;
 
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserDetailsImpl(Long id, String username, String email, String password,
-                           Collection<? extends GrantedAuthority> authorities) {
+                           Collection<? extends GrantedAuthority> authorities, User user, Role role) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
+        this.user = user;
+        this.role = role;
     }
 
     public static UserDetailsImpl build(User user) {
-//        List<GrantedAuthority> authorities = user.getRoles().stream()
-//                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
-//                .collect(Collectors.toList());
         List<GrantedAuthority> authorities = new ArrayList<>();
         return new UserDetailsImpl(
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
-                authorities);
+                authorities,
+                user,
+                user.getRole());
     }
 
     @Override
@@ -87,6 +93,14 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Role getRole() {
+        return role;
     }
 
     @Override

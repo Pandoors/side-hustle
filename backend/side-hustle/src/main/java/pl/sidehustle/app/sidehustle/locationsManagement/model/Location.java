@@ -43,6 +43,13 @@ public class Location {
     @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
     private Set<Offer> offers;
 
+    public String getFullName(){
+
+        return city + " (" + name + ") " + address;
+
+    }
+
+
     public Location() {
     }
 }

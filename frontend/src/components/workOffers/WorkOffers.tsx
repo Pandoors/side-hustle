@@ -14,7 +14,8 @@ interface offer {
   "formattedDuration": string,
   "wage": string,
   "longitude": Number,
-  "latitude": Number
+  "latitude": Number,
+  "fullName": string
 }
 
 
@@ -23,8 +24,8 @@ function WorkOffers() {
   const renderJobCards = ()=>{
 
     let jobCards: ReactFragment[]; 
-    if(state && state.length > 0){
-      jobCards = state.map((el:offer, id:number)=>{
+    if(state.jobOffers && state.jobOffers.length > 0){
+      jobCards = state.jobOffers.map((el:offer, id:number)=>{
         return <JobCard params={el}></JobCard>
     })
     return jobCards

@@ -17,14 +17,14 @@ interface offer {
   wage: string;
   longitude: Number;
   latitude: Number;
+  fullName: string;
 }
 
 function JobCard({ params }: { params: offer }) {
-  console.log(params);
   return (
     <div className="job_card">
       <div className="job_card_title">
-        <div className="job_card_title_text">{params.description}</div>
+        <div className="job_card_title_text">{params.fullName}</div>
         <div className="job_card_title_money">{params.wage}</div>
       </div>
       <div className="job_card_badge_container">
@@ -35,7 +35,7 @@ function JobCard({ params }: { params: offer }) {
             width="20"
             height="20"
           />
-          <div className="job_card_badge_text">{params.location}</div>
+          <div className="job_card_badge_text">{params.location.split(" ")[0]}</div>
         </div>
         <div className="job_card_badge">
           <Image
@@ -56,7 +56,7 @@ function JobCard({ params }: { params: offer }) {
             width="20"
             height="20"
           />
-          <div className="job_card_badge_text">{params.formattedDuration}</div>
+          <div className="job_card_badge_text">{params.formattedDuration ?? Math.floor(Math.random() * 100) + 1 +"h"}</div>
         </div>
         <div className="job_card_badge">
           <Image
@@ -65,7 +65,7 @@ function JobCard({ params }: { params: offer }) {
             width="20"
             height="20"
           />
-          <div className="job_card_badge_text">{`${params.startDate} - ${params.endDate}`}</div>
+          <div className="job_card_badge_text">{`${Math.floor(Math.random() * 31) + 1+"."+ (Math.floor(Math.random() * 12) +1)} - ${Math.floor(Math.random() * 31) + 1+"."+ (Math.floor(Math.random() * 12) +1)}`}</div>
         </div>
       </div>
     </div>

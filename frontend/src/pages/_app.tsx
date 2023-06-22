@@ -3,7 +3,7 @@ import { StateProvider } from "@/context/State";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-
+import toast, { Toaster } from 'react-hot-toast';
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
@@ -19,6 +19,7 @@ export default function App({ Component, pageProps }: AppProps) {
           rel="stylesheet"
         />
       </Head>
+     <Toaster></Toaster>
       <StateProvider>
         <Layout>
           <Component {...pageProps} />
