@@ -29,6 +29,13 @@ public class UserRepository {
             return null;
         }
     }
+    public User getUserById(Long userId) {
+        try {
+            return entityManager.createNamedQuery("User.userById", User.class).setParameter("id", userId).getSingleResult();
+        } catch (NoResultException | NonUniqueResultException e) {
+            return null;
+        }
+    }
     public User getUserByMail(String mail) {
         try {
             return entityManager.createNamedQuery("User.userByMail", User.class).setParameter("mail", mail).getSingleResult();

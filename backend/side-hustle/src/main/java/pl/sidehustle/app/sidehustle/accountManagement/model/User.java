@@ -24,6 +24,10 @@ import java.util.Set;
                 query = "SELECT u FROM User u WHERE u.username = :username"
         ),
         @NamedQuery(
+                name = "User.userById",
+                query = "SELECT u FROM User u WHERE u.id = :id"
+        ),
+        @NamedQuery(
                 name = "User.userByMail",
                 query = "SELECT u FROM User u WHERE u.email = :mail"
         )
@@ -35,7 +39,7 @@ public class User {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "role_id")
+    @Column(name = "role_id", insertable = false, updatable = false)
     private Long roleId;
 
     @Column(name = "created_at")
@@ -66,7 +70,7 @@ public class User {
     private Set<Offer> offers;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id", insertable = false, updatable = false)
+    @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
 
