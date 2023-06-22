@@ -38,6 +38,11 @@ public class Role {
     public Role() {
     }
 
+    /**
+     Basically the whole concept of Role class could be summed to this one method.
+     The role table as it is has no value and in future should be replace with single
+     column in User class
+     */
     public String getRoleLevel(){
         if (this.adminAccess){
             return RoleLevel.ADMIN.toString();
