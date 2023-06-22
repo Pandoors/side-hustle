@@ -14,21 +14,13 @@ const MapComponent = dynamic(() => import('@/components/streetMap/MapComponent')
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
-  const [markers, setMarkers] = useState([{ lat: 50.068693, lng: 19.923657 },]);
-
-  const state = useStateProvider()
-  useEffect( ()=>{
-
-    let markersList : any[] = []; 
-    if(state.jobOffers && state.jobOffers.length > 0){
-      markersList = state.jobOffers.map((el:any, id:number)=>{
-        return {lat: el.latitude, lng: el.longitude, description: el.fullName}
-    })
-    }
-    console.log(markersList)
-    setMarkers(markersList)
-  }, [])
-
+  const markers = [
+    { lat: 50.068693, lng: 19.923657 },
+    { lat: 50.18693, lng: 19.923657 },
+    { lat: 50.168693, lng: 19.923657 },
+    { lat: 50.128693, lng: 19.973657 },
+    { lat: 50.028693, lng: 19.943657 },
+  ];
   return (
     <>
      <Filters/>

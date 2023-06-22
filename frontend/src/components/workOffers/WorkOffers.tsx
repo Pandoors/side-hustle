@@ -44,7 +44,7 @@ function WorkOffers() {
           marginTop: "30px",
         }}
       >
-        Oferty pracy ({state.offersCount})
+        Oferty pracy (10)
       </div>
       <div className="job_cards">
         {renderJobCards()}

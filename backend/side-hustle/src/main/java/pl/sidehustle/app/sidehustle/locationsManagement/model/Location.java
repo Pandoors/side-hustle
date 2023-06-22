@@ -37,15 +37,15 @@ public class Location {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "district")
+    private String district;
 
     @OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
     private Set<Offer> offers;
 
     public String getFullName(){
 
-        return city + " (" + name + ") " + address;
+        return city + " (" + district + ") " + address;
 
     }
 
