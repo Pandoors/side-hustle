@@ -10,6 +10,20 @@ import lombok.Setter;
 @Setter
 @Table(name = "cvs")
 @Access(AccessType.FIELD)
+@NamedQueries({
+        @NamedQuery(
+                name = "CV.cvByUserId",
+                query = "SELECT c FROM CV c WHERE c.userId = :id"
+        ),
+        @NamedQuery(
+                name = "CV.cvList",
+                query = "SELECT c FROM CV c"
+        ),
+        @NamedQuery(
+                name = "CV.cvByOfferId",
+                query = "SELECT c FROM CV c WHERE c.userId IN (SELECT uo.id.userId FROM UserOffer uo WHERE uo.id.offerId = :id)"
+        ),
+})
 public class CV {
     @Id
     @Column(name = "user_id")

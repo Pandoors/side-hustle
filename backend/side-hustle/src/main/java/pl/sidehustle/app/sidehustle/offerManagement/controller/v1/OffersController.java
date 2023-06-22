@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import pl.sidehustle.app.sidehustle.accountManagement.model.Role;
 import pl.sidehustle.app.sidehustle.accountManagement.model.RoleLevel;
 import pl.sidehustle.app.sidehustle.offerManagement.dto.NewOfferRequestDTO;
+import pl.sidehustle.app.sidehustle.accountManagement.dto.CVDTO;
+import pl.sidehustle.app.sidehustle.accountManagement.service.CVService;
 import pl.sidehustle.app.sidehustle.offerManagement.dto.OfferDTO;
 import pl.sidehustle.app.sidehustle.offerManagement.service.OffersService;
 import pl.sidehustle.app.sidehustle.security.jwt.JwtUtils;
@@ -34,9 +36,12 @@ public class OffersController {
 
     private final OffersService offersService;
 
+    private final CVService cvService;
+
     @Autowired
-    public OffersController(OffersService offersService) {
+    public OffersController(OffersService offersService, CVService cvService) {
         this.offersService = offersService;
+        this.cvService = cvService;
     }
 
     @GetMapping("/count")
@@ -58,6 +63,12 @@ public class OffersController {
 
         logger.info("Received getOffer request from: {} with id {}", userDetails.getUser().getUsername(), userDetails.getUser().getId());
         return offersService.getOfferById(id);
+    }
+
+    @GetMapping("/cvs/{id}")
+    public List<CVDTO> getCVs(@PathVariable Long id) {
+        logger.info("Received getCVs request");
+        return cvService.getCVsFromOffer(id);
     }
 
     @GetMapping("/list/user/{id}")
