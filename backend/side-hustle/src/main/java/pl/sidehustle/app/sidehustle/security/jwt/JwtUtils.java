@@ -2,11 +2,13 @@ package pl.sidehustle.app.sidehustle.security.jwt;
 
 
 import io.jsonwebtoken.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import pl.sidehustle.app.sidehustle.security.service.UserDetailsImpl;
 
 import java.util.Date;

@@ -60,7 +60,7 @@ public class User {
     @Column(name = "username")
     private String username;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private CV cv;
 
     @OneToMany(mappedBy = "worker", cascade = CascadeType.ALL)
