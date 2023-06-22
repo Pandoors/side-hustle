@@ -43,7 +43,7 @@ function WorkOffers() {
           marginTop: "30px",
         }}
       >
-        Oferty pracy (2137)
+        Oferty pracy (10)
       </div>
       <div className="job_cards">
         {renderJobCards()}

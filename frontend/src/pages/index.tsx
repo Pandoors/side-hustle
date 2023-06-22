@@ -14,7 +14,10 @@ const inter = Inter({ subsets: ['latin'] })
 export default function Home() {
   const markers = [
     { lat: 50.068693, lng: 19.923657 },
-  
+    { lat: 50.18693, lng: 19.923657 },
+    { lat: 50.168693, lng: 19.923657 },
+    { lat: 50.128693, lng: 19.973657 },
+    { lat: 50.028693, lng: 19.943657 },
   ];
   return (
     <>
