@@ -14,6 +14,8 @@ const MapComponent = dynamic(() => import('@/components/streetMap/MapComponent')
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+
+
   const markers = [
     { lat: 50.068693, lng: 19.923657 },
     { lat: 50.18693, lng: 19.923657 },

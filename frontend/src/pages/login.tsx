@@ -9,6 +9,7 @@ import auth_banner from "../assets/images/auth_banner.png";
 import { useFormik } from 'formik'
 import loginSchema from '@/schemas/loginSchema'
 import { useStateProvider } from '@/context/State'
+import { useRouter } from 'next/router'
 
 
 
@@ -16,6 +17,8 @@ import { useStateProvider } from '@/context/State'
 export default function Login() {
  
   const {login} = useStateProvider()
+  const Router = useRouter()
+
 
   const form = useFormik({
     initialValues: {
@@ -58,11 +61,11 @@ export default function Login() {
                 <input className='auth_input' value={form.values.password} onChange={form.handleChange("password")} type='password'></input>
             </div>
         </div>
-        <div className='auth_action_button'>
-            <div className='auth_action_button_text' onClick={()=>form.handleSubmit()}>Zaloguj się</div>
+        <div className='auth_action_button' onClick={()=>form.handleSubmit()}>
+            <div className='auth_action_button_text' >Zaloguj się</div>
         </div>
         <div className='auth_description'>
-            Nie masz konta? <span className='auth_description_highlited'>{" "} Zarejestruj się</span>
+            Nie masz konta? <span className='auth_description_highlited' onClick={()=>Router.push("/register")}>{" "} Zarejestruj się</span>
         </div>
     </div>
   )

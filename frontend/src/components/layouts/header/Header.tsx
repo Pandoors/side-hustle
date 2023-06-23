@@ -29,6 +29,9 @@ function Header() {
           <div className="auth_header_username">
             {auth.username}
           </div>
+          <div className="auth_header_username">
+            {auth.role}
+          </div>
           <div className="header_button" onClick={()=>{setAuth({username: null})}}>
             Wyloguj
           </div>

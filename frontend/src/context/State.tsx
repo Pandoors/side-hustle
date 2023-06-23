@@ -9,13 +9,39 @@ export const useStateProvider = () => useContext<any>(StateContext);
 export const StateProvider = ({ children }: { children: React.ReactNode }) => {
   const [jobOffers, setJobOffers] = useState<any>();
   const [offersCount, setOffersCount] = useState<number>(0);
-  const [auth, setAuth] = useState<any>({ username: null });
+  const [auth, setAuth] = useState<any>({
+    username: null,
+    accessToken: null,
+    role: null,
+    refreshToken: null,
+  });
+  const [currentOffer, setCurrentOffer] = useState<number>(-1);
+
+  /// edit offer card
+  const [isCreateOfferJobCard, setIsCreateOfferJobCard] = useState(false);
+  const [latLangOfChoosenPlace, setLatLangOfChoosenPlace] = useState<any>({
+    lat: 0,
+    lng: 0,
+  });
+
+  const defaultLink: string = "http://localhost:8080/api/";
 
   const router = useRouter();
 
   useEffect(() => {
-   let obj;
-    fetch("http://localhost:8080/api/v1/offer/list")
+    let obj;
+    const params: any = {
+      size: 50,
+    };
+
+    const options: any = {
+      method: "GET",
+      params: params,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    fetch(`${defaultLink}v1/offer/list?size=` + 13 +"&offset=0")
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
@@ -24,7 +50,7 @@ export const StateProvider = ({ children }: { children: React.ReactNode }) => {
         console.log(data);
       });
 
-    fetch("http://localhost:8080/api/v1/offer/count")
+    fetch(`${defaultLink}v1/offer/count`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
@@ -38,22 +64,19 @@ export const StateProvider = ({ children }: { children: React.ReactNode }) => {
     if (res.status < 300 && res.status >= 200) {
       return res.json();
     } else {
-      try{
+      try {
         if (res) {
           let data: any = await res.json();
           if (data) {
-           
-              toast.error(data.message);
-            
+            toast.error(data.message);
           } else {
             toast.error("Błąd sieci");
           }
         }
-      }catch(error){
+      } catch (error) {
         toast.error("Złe hasło lub login");
       }
-      console.log(res)
-      
+      console.log(res);
 
       return null;
     }
@@ -74,14 +97,14 @@ export const StateProvider = ({ children }: { children: React.ReactNode }) => {
       },
     };
 
-    fetch("http://localhost:8080/api/v1/auth/signup", options)
+    fetch(`${defaultLink}v1/auth/signup`, options)
       .then((res) => {
         return networkStatusFilter(res);
       })
       .then((data: any) => {
         if (data && data.message) {
           toast.success(data.message);
-          setInterval(() => {
+          setTimeout(() => {
             router.push("/login");
           }, 1000);
         }
@@ -102,17 +125,47 @@ export const StateProvider = ({ children }: { children: React.ReactNode }) => {
       },
     };
 
-    fetch("http://localhost:8080/api/v1/auth/signin", options)
+    fetch(`${defaultLink}v1/auth/signin`, options)
       .then((res) => {
         return networkStatusFilter(res);
       })
       .then((data: any) => {
-        if (data  ) {
+        if (data) {
           toast.success("User logged in successfully");
-          setAuth({ username: data.username });
-          setInterval(() => {
+          setAuth({
+            username: data.username,
+            accessToken: data.accessToken,
+            role: data.roleLevel,
+            refreshToken: data.refreshToken,
+          });
+          setTimeout(() => {
             router.push("/");
           }, 1000);
+        }
+      });
+  };
+
+  const addPost = (obj: any) => {
+    const params: any = obj;
+
+    const options: any = {
+      method: "POST",
+      body: JSON.stringify(params),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + auth.accessToken,
+      },
+    };
+
+    fetch(`${defaultLink}v1/offer/new`, options)
+      .then((res) => {
+        return networkStatusFilter(res);
+      })
+      .then((data: any) => {
+        if (data && data.message) {
+          console.log(data);
+          toast.success(data.message);
+          setIsCreateOfferJobCard(false);
         }
       });
   };
@@ -124,6 +177,13 @@ export const StateProvider = ({ children }: { children: React.ReactNode }) => {
     login: login,
     auth: auth,
     setAuth: setAuth,
+    currentOffer: currentOffer,
+    setCurrentOffer: setCurrentOffer,
+    addPost: addPost,
+    isCreateOfferJobCard: isCreateOfferJobCard,
+    setIsCreateOfferJobCard: setIsCreateOfferJobCard,
+    latLangOfChoosenPlace: latLangOfChoosenPlace,
+    setLatLangOfChoosenPlace: setLatLangOfChoosenPlace,
   };
 
   return (
