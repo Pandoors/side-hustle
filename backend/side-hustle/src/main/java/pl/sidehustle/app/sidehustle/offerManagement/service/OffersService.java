@@ -226,7 +226,7 @@ public class OffersService {
 
         Offer offer = offerRepository.getOfferById(offerId);
 
-        if (!Objects.equals(offer.getId(), user.getId())) {
+        if (!Objects.equals(offer.getOwnerId(), user.getId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "It's not Your offer");
         }
 
