@@ -28,14 +28,14 @@ function WorkOffers() {
 
   const setCreateOfferJobCard = () => {
     state.setIsCreateOfferJobCard(true);
-  } 
+  };
 
   const renderJobCards = () => {
     let jobCards: ReactFragment[];
     let bottomElements: JSX.Element[] | undefined;
     let topElements: JSX.Element[] | undefined;
-    if(state.isCreateOfferJobCard){
-      return <JobCardEdit/>
+    if (state.isCreateOfferJobCard) {
+      return <JobCardEdit />;
     }
     if (state.currentOffer > 0 && state.jobOffers) {
       bottomElements = [
@@ -50,7 +50,14 @@ function WorkOffers() {
         ></JobCardDescription>,
       ];
       if (state.auth.role == "CUSTOMER") {
-        bottomElements.push(<CustomButton text="Aplikuj" ></CustomButton>);
+        bottomElements.push(
+          <CustomButton
+            text="Aplikuj"
+            onClick={() => {
+              state.setIsCvBeingAdded(true);
+            }}
+          ></CustomButton>
+        );
       }
     }
 
@@ -89,7 +96,9 @@ function WorkOffers() {
         >
           Oferty pracy( {state.jobOffers.length} )
         </div>
-      ) : state.auth.role == "PROVIDER" && state.currentOffer < 0 && !state.isCreateOfferJobCard ? (
+      ) : state.auth.role == "PROVIDER" &&
+        state.currentOffer < 0 &&
+        !state.isCreateOfferJobCard ? (
         <div
           style={{
             color: "#3B39A1",
@@ -105,8 +114,11 @@ function WorkOffers() {
           <span style={{ marginTop: "20px" }}>
             Moje aktualne oferty pracy( {state.jobOffers.length} )
           </span>
-          <div style={{ marginLeft: '70px'}}>
-            <CustomButton text="Dodaj ofertę" onClick={setCreateOfferJobCard} ></CustomButton>
+          <div style={{ marginLeft: "70px" }}>
+            <CustomButton
+              text="Dodaj ofertę"
+              onClick={setCreateOfferJobCard}
+            ></CustomButton>
           </div>
         </div>
       ) : (
@@ -155,8 +167,13 @@ function WorkOffers() {
             cursor: "pointer",
           }}
         >
-          <CustomButton text="Usuń" oppositeColors={true}></CustomButton>
           <CustomButton
+            text="Usuń"
+            oppositeColors={true}
+            onClick={() => state.removePost(state.currentOffer)}
+          ></CustomButton>
+          <CustomButton
+            onClick={() => state.removePost(state.currentOffer)}
             text="Zakończ rekrutację"
             oppositeColors={true}
           ></CustomButton>

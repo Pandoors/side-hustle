@@ -24,28 +24,44 @@ export const StateProvider = ({ children }: { children: React.ReactNode }) => {
     lng: 0,
   });
 
+  const [isCvBeingAdded, setIsCvBeingAdded] = useState<boolean>(false);
+
   const defaultLink: string = "http://localhost:8080/api/";
 
   const router = useRouter();
 
   useEffect(() => {
-    let obj;
-    const params: any = {
-      size: 50,
-    };
+    if (auth.role == "PROVIDER") {
+      const options: any = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + auth.accessToken,
+        },
+      };
+      fetch(`${defaultLink}v1/offer/list/personal`, options)
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          setJobOffers(data);
+          console.log(data);
+        });
+    } else {
+      fetch(`${defaultLink}v1/offer/list?size=` + 13 + "&offset=0")
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          setJobOffers(data);
+          console.log(data);
+        });
+    }
+  }, [auth]);
 
-    const options: any = {
-      method: "GET",
-      params: params,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    fetch(`${defaultLink}v1/offer/list?size=` + 13 +"&offset=0")
+  useEffect(() => {
+    fetch(`${defaultLink}v1/offer/list?size=` + 13 + "&offset=0")
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        obj = data;
         setJobOffers(data);
         console.log(data);
       });
@@ -54,7 +70,6 @@ export const StateProvider = ({ children }: { children: React.ReactNode }) => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        obj = data;
         setOffersCount(data);
         console.log(data);
       });
@@ -170,6 +185,57 @@ export const StateProvider = ({ children }: { children: React.ReactNode }) => {
       });
   };
 
+  const removePost = (id: any) => {
+    const params: any = {
+      offerId: id,
+    };
+
+    const options: any = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + auth.accessToken,
+      },
+    };
+
+    fetch(`${defaultLink}v1/offer/remove/` + id, options)
+      .then((res) => {
+        return networkStatusFilter(res);
+      })
+      .then((data: any) => {
+        if (data && data.message) {
+          console.log(data);
+          toast.success(data.message);
+          setCurrentOffer(-1);
+        }
+      });
+  };
+
+  const addCv = (obj: any) => {
+    const params: any = obj;
+
+    const options: any = {
+      method: "POST",
+      body: JSON.stringify(params),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + auth.accessToken,
+      },
+    };
+
+    fetch(`${defaultLink}v1/cv/new`, options)
+      .then((res) => {
+        return networkStatusFilter(res);
+      })
+      .then((data: any) => {
+        if (data && data.message) {
+          console.log(data);
+          toast.success(data.message);
+          setCurrentOffer(-1);
+        }
+      });
+  };
+
   const stateValue = {
     jobOffers: jobOffers,
     offersCount: offersCount,
@@ -180,10 +246,14 @@ export const StateProvider = ({ children }: { children: React.ReactNode }) => {
     currentOffer: currentOffer,
     setCurrentOffer: setCurrentOffer,
     addPost: addPost,
+    removePost: removePost,
+    addCv: addCv,
     isCreateOfferJobCard: isCreateOfferJobCard,
     setIsCreateOfferJobCard: setIsCreateOfferJobCard,
     latLangOfChoosenPlace: latLangOfChoosenPlace,
     setLatLangOfChoosenPlace: setLatLangOfChoosenPlace,
+    isCvBeingAdded: isCvBeingAdded,
+    setIsCvBeingAdded: setIsCvBeingAdded,
   };
 
   return (
