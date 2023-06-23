@@ -16,6 +16,7 @@ import pl.sidehustle.app.sidehustle.exceptions.BadRequestException;
 import pl.sidehustle.app.sidehustle.locationsManagement.dto.LocationDTO;
 import pl.sidehustle.app.sidehustle.locationsManagement.model.Location;
 import pl.sidehustle.app.sidehustle.locationsManagement.repository.LocationRepository;
+import pl.sidehustle.app.sidehustle.offerManagement.dto.EditOfferRequestDTO;
 import pl.sidehustle.app.sidehustle.offerManagement.dto.NewOfferRequestDTO;
 import pl.sidehustle.app.sidehustle.offerManagement.dto.OfferDTO;
 import pl.sidehustle.app.sidehustle.offerManagement.model.Offer;
@@ -129,5 +130,56 @@ public class OffersService {
         }
 
     }
+    public void editOffer(EditOfferRequestDTO offerRequestDTO , User user, Role role) throws ParseException {
 
+        if (role == null || !Set.of(RoleLevel.PROVIDER.toString(), RoleLevel.ADMIN.toString()).contains(role.getRoleLevel())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You need to be provider or admin in order to add offer");
+        }
+        if (offerRequestDTO != null && offerRequestDTO.getOfferId() != null) {
+            Offer offer = offerRepository.getOfferById(offerRequestDTO.getOfferId());
+            Location location = offer.getLocation();
+            if (offerRequestDTO.getLocation() != null){
+                LocationDTO locationDTO = offerRequestDTO.getLocation();
+                if (locationDTO.getAddress() != null){
+                    location.setAddress(locationDTO.getAddress());
+                }
+                if (locationDTO.getCity() != null){
+                    location.setCity(locationDTO.getCity());
+                }
+                if (locationDTO.getDistrict() != null){
+                    location.setDistrict(locationDTO.getDistrict());
+                }
+                if (locationDTO.getLongitude() != null){
+                    location.setLongitude(locationDTO.getLongitude());
+                }
+                if (locationDTO.getLatitude() != null){
+                    location.setLatitude(locationDTO.getLatitude());
+                }
+            }
+            locationRepository.editLocation(location);
+
+            if (offerRequestDTO.getFullName() != null){
+                offer.setFullName(offerRequestDTO.getFullName());
+            }
+            if (offerRequestDTO.getEndDate() != null){
+                offer.setOfferEnd(DateUtil.parseDate(offerRequestDTO.getEndDate()));
+            }
+            if (offerRequestDTO.getStartDate() != null){
+                offer.setOfferStart(DateUtil.parseDate(offerRequestDTO.getStartDate()));
+            }
+            if (offerRequestDTO.getWage() != null){
+                offer.setPayment(offerRequestDTO.getWage());
+            }
+            if (offerRequestDTO.getDescription() != null){
+                offer.setDescription(offerRequestDTO.getDescription());
+            }
+            if (offerRequestDTO.getJobType() != null){
+                offer.setOfferType(offerRequestDTO.getJobType());
+            }
+            offerRepository.editOffer(offer);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Offer is null or offer id is null!");
+        }
+
+    }
 }

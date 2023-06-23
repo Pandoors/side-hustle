@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import pl.sidehustle.app.sidehustle.locationsManagement.model.Location;
 import pl.sidehustle.app.sidehustle.offerManagement.model.Offer;
 
 import java.util.List;
@@ -62,5 +63,9 @@ public class OfferRepository {
         entityManager.persist(offer);
     }
 
+    @Transactional
+    public void editOffer(Offer offer) {
+        entityManager.merge(offer);
+    }
 
 }

@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import pl.sidehustle.app.sidehustle.accountManagement.model.Role;
 import pl.sidehustle.app.sidehustle.accountManagement.model.RoleLevel;
+import pl.sidehustle.app.sidehustle.offerManagement.dto.EditOfferRequestDTO;
 import pl.sidehustle.app.sidehustle.offerManagement.dto.NewOfferRequestDTO;
 import pl.sidehustle.app.sidehustle.accountManagement.dto.CVDTO;
 import pl.sidehustle.app.sidehustle.accountManagement.service.CVService;
@@ -26,6 +27,7 @@ import pl.sidehustle.app.sidehustle.security.payload.LoginRequest;
 import pl.sidehustle.app.sidehustle.security.payload.MessageResponse;
 import pl.sidehustle.app.sidehustle.security.service.UserDetailsImpl;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -71,7 +73,7 @@ public class OffersController {
         return cvService.getCVsFromOffer(id);
     }
 
-    @GetMapping("/list/user/{id}")
+    @GetMapping("/user/{id}")
     public List<OfferDTO> getOffersByUserId(@PathVariable Long id) {
         logger.info("Received getOffersByUserId request");
         return offersService.getOwnersOffers(id);
@@ -85,11 +87,24 @@ public class OffersController {
 
     @PostMapping("/new")
     public ResponseEntity<?>  addOffer(@Valid @RequestBody NewOfferRequestDTO offerRequestDTO, Authentication authentication) {
-        logger.info("Received addOffer request");
+
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         User user = userDetails.getUser();
         Role role = userDetails.getRole();
+
+        logger.info("Received addOffer request from {}", user.getUsername());
         offersService.addNewOffer(offerRequestDTO, user, role);
+
+        return ResponseEntity.ok(new MessageResponse("Offer added successfully"));
+    }
+    @PutMapping("/edit")
+    public ResponseEntity<?>  editOffer(@Valid @RequestBody EditOfferRequestDTO offerRequestDTO, Authentication authentication) throws ParseException {
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        User user = userDetails.getUser();
+        Role role = userDetails.getRole();
+        logger.info("Received editOffer request from {}", user.getUsername());
+        offersService.editOffer(offerRequestDTO, user, role);
 
         return ResponseEntity.ok(new MessageResponse("Offer added successfully"));
     }

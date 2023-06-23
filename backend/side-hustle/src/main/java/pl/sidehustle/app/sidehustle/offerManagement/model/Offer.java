@@ -19,7 +19,7 @@ import java.util.Set;
 @NamedQueries({
         @NamedQuery(
                 name = "Offer.offerById",
-                query = "SELECT o FROM Offer o WHERE o.id = :id"
+                query = "SELECT o FROM Offer o LEFT JOIN FETCH o.location l WHERE o.id = :id"
         ),
         @NamedQuery(
                 name = "Offer.offerByOwnerId",

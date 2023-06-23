@@ -23,4 +23,10 @@ public class LocationRepository {
         entityManager.persist(location);
     }
 
+    @Transactional
+    public void editLocation(Location location) {
+        entityManager.merge(location);
+    }
+
+
 }
