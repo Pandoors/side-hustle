@@ -11,7 +11,6 @@ import pl.sidehustle.app.sidehustle.accountManagement.model.Role;
 import pl.sidehustle.app.sidehustle.accountManagement.model.RoleLevel;
 import pl.sidehustle.app.sidehustle.accountManagement.model.User;
 import pl.sidehustle.app.sidehustle.accountManagement.repository.UserRepository;
-import pl.sidehustle.app.sidehustle.enums.JobType;
 import pl.sidehustle.app.sidehustle.exceptions.BadRequestException;
 import pl.sidehustle.app.sidehustle.locationsManagement.dto.LocationDTO;
 import pl.sidehustle.app.sidehustle.locationsManagement.model.Location;
@@ -24,8 +23,6 @@ import pl.sidehustle.app.sidehustle.offerManagement.repository.OfferRepository;
 import pl.sidehustle.app.sidehustle.utils.DateUtil;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -173,7 +170,7 @@ public class OffersService {
             if (offerRequestDTO.getDescription() != null){
                 offer.setDescription(offerRequestDTO.getDescription());
             }
-            if (offerRequestDTO.getJobType() != null){
+            if (offerRequestDTO.getJobType() != null) {
                 offer.setOfferType(offerRequestDTO.getJobType());
             }
             offerRepository.editOffer(offer);
@@ -181,5 +178,13 @@ public class OffersService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Offer is null or offer id is null!");
         }
 
+    }
+
+    public boolean appliedToOffer(Long offerId, Long userId) {
+        return offerRepository.isOfferApplied(offerId, userId);
+    }
+
+    public void applyToOffer(Long offerId, Long userId) {
+        offerRepository.applyToOffer(offerId, userId);
     }
 }

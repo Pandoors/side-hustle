@@ -8,8 +8,9 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-import pl.sidehustle.app.sidehustle.locationsManagement.model.Location;
 import pl.sidehustle.app.sidehustle.offerManagement.model.Offer;
+import pl.sidehustle.app.sidehustle.offerManagement.model.UserOffer;
+import pl.sidehustle.app.sidehustle.offerManagement.model.UserOfferPK;
 
 import java.util.List;
 
@@ -51,6 +52,22 @@ public class OfferRepository {
         } catch (NoResultException | NonUniqueResultException e) {
             return null;
         }
+    }
+
+    public boolean isOfferApplied(Long offerId, Long userId) {
+        try {
+            return entityManager.createNamedQuery("UserOffer.userOfferExists", Boolean.class).setParameter("userId", userId).setParameter("offerId", offerId).getSingleResult();
+        } catch (NoResultException | NonUniqueResultException e) {
+            return false;
+        }
+    }
+
+    @Transactional
+    public void applyToOffer(Long offerId, Long userId) {
+        UserOffer userOffer = new UserOffer();
+        UserOfferPK userOfferPK = new UserOfferPK(offerId, userId);
+        userOffer.setId(userOfferPK);
+        entityManager.persist(userOffer);
     }
 
     @Transactional

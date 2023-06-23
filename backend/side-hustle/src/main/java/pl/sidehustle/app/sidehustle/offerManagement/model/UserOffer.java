@@ -11,6 +11,12 @@ import pl.sidehustle.app.sidehustle.accountManagement.model.User;
 @Setter
 @Table(name = "user_offer")
 @Access(AccessType.FIELD)
+@NamedQueries(
+        @NamedQuery(
+                name = "UserOffer.userOfferExists",
+                query = "SELECT CASE WHEN COUNT(uo) > 0 THEN TRUE ELSE FALSE END FROM UserOffer uo WHERE uo.id.userId = :userId AND uo.id.offerId = :offerId"
+        )
+)
 public class UserOffer {
 
     @EmbeddedId
