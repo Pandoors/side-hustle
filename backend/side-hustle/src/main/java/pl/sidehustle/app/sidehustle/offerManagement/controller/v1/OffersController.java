@@ -113,4 +113,27 @@ public class OffersController {
             return ResponseEntity.ok(new MessageResponse("Applied to offer successfully"));
         }
     }
+
+    @PostMapping("/remove/{offerId}")
+    public ResponseEntity<?> removeOffer(@PathVariable Long offerId, Authentication authentication) {
+        logger.info("Received remove offer request");
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        User user = userDetails.getUser();
+        Role role = userDetails.getRole();
+
+        offersService.removeOffer(offerId, user, role);
+        return ResponseEntity.ok().body(new MessageResponse("`Removed offer`"));
+
+    }
+
+    @GetMapping("/list/personal")
+    public List<OfferDTO> getOffersPersonal(@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer size, Authentication authentication) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        User user = userDetails.getUser();
+        Role role = userDetails.getRole();
+        logger.info("Received getOffersPersonal request from {}", user.getUsername());
+        return offersService.getOfferListPersonal(offset, size, user, role);
+    }
+
+
 }

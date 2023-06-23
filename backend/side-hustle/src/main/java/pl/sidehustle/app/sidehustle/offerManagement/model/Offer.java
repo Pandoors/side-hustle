@@ -33,6 +33,10 @@ import java.util.Set;
                 name = "Offer.offerList",
                 query = "SELECT o FROM Offer o"
         ),
+        @NamedQuery(
+                name = "Offer.offerListPersonal",
+                query = "SELECT o FROM Offer o WHERE o.ownerId = :ownerId AND o.deletedAt IS NULL"
+        )
 })
 public class Offer {
     @Id

@@ -29,7 +29,15 @@ public class OfferRepository {
             return null;
         }
     }
-
+    public List<Offer> getOffersPersonal(Long userId) {
+        try {
+            return entityManager.createNamedQuery("Offer.offerListPersonal", Offer.class)
+                    .setParameter("ownerId", userId)
+                    .getResultList();
+        } catch (NoResultException | NonUniqueResultException e) {
+            return null;
+        }
+    }
     public Offer getOfferById(Long id) {
         try {
             return entityManager.createNamedQuery("Offer.offerById", Offer.class).setParameter("id", id).getSingleResult();
@@ -73,6 +81,11 @@ public class OfferRepository {
     @Transactional
     public void deleteOffer(Offer offer) {
         entityManager.remove(offer);
+    }
+
+    @Transactional
+    public void mergeOffer(Offer offer) {
+        entityManager.merge(offer);
     }
 
     @Transactional

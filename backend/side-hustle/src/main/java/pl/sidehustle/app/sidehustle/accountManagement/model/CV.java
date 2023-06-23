@@ -3,6 +3,7 @@ package pl.sidehustle.app.sidehustle.accountManagement.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -42,7 +43,7 @@ public class CV {
     private String phoneNumber;
 
     @Column(name = "country_code")
-    private String countryCode;
+    private Long countryCode;
 
     @Column(name = "educational_level")
     private String educationalLevel;
@@ -55,5 +56,16 @@ public class CV {
     private User user;
 
     public CV() {
+    }
+
+    public CV(Long userId, String name, String surname, String email, String phoneNumber, String educationalLevel, String contactEmail, User user) {
+        this.userId = userId;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.educationalLevel = educationalLevel;
+        this.contactEmail = contactEmail;
+        this.user = user;
     }
 }

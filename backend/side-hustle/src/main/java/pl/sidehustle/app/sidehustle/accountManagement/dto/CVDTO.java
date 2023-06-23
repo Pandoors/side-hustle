@@ -1,11 +1,18 @@
 package pl.sidehustle.app.sidehustle.accountManagement.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.sidehustle.app.sidehustle.accountManagement.model.CV;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
 @Getter
 @Setter
+@XmlRootElement(name = "")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class CVDTO {
 
     private String firstName;
@@ -14,12 +21,8 @@ public class CVDTO {
     private String phoneNumber;
     private String education;
 
-    public CVDTO(String firstName, String lastName, String email, String phoneNumber, String education) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.education = education;
+
+    public CVDTO() {
     }
 
     public CVDTO(CV cv) {

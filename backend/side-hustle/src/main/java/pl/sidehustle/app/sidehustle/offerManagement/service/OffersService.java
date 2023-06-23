@@ -23,8 +23,7 @@ import pl.sidehustle.app.sidehustle.offerManagement.repository.OfferRepository;
 import pl.sidehustle.app.sidehustle.utils.DateUtil;
 
 import java.text.ParseException;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -70,6 +69,37 @@ public class OffersService {
         }
     }
 
+    public List<OfferDTO> getOfferListPersonal(Integer offset, Integer size, User user, Role role) {
+
+        if (role == null || !Set.of(RoleLevel.PROVIDER.toString(), RoleLevel.ADMIN.toString()).contains(role.getRoleLevel())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You need to be provider or admin in order to add offer");
+        }
+
+        List<OfferDTO> offers = offerRepository.getOffersPersonal(user.getId()).stream().map(OfferDTO::new).toList();
+
+        if (offers == null || offers.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        int length = offers.size();
+        if (offset == null || size == null) {
+            logger.info("Returning {} offers", this.defaultSize);
+
+            if (this.defaultSize > length) {
+                return offers.subList(0, length);
+            } else {
+
+                return offers.subList(0, this.defaultSize);
+            }
+        } else if (offset > length || size > length || offset + size > length) {
+            logger.error("Bad query params in getOfferList");
+            throw new BadRequestException();
+
+        } else {
+            logger.info("Returning {} offers", size);
+            return offers.subList(offset, offset + size);
+        }
+    }
 
     public Integer getOffersCount() {
         return offerRepository.getOffers().size();
@@ -87,9 +117,9 @@ public class OffersService {
         return offerRepository.getOffersByLocationId(locationId).stream().map(OfferDTO::new).toList();
     }
 
-    public void addNewOffer(NewOfferRequestDTO offerRequestDTO , User user, Role role){
+    public void addNewOffer(NewOfferRequestDTO offerRequestDTO, User user, Role role) {
 
-        if (role == null || !Set.of(RoleLevel.PROVIDER.toString(), RoleLevel.ADMIN.toString()).contains(role.getRoleLevel())){
+        if (role == null || !Set.of(RoleLevel.PROVIDER.toString(), RoleLevel.ADMIN.toString()).contains(role.getRoleLevel())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You need to be provider or admin in order to add offer");
         }
 
@@ -127,7 +157,8 @@ public class OffersService {
         }
 
     }
-    public void editOffer(EditOfferRequestDTO offerRequestDTO , User user, Role role) throws ParseException {
+
+    public void editOffer(EditOfferRequestDTO offerRequestDTO, User user, Role role) throws ParseException {
 
         if (role == null || !Set.of(RoleLevel.PROVIDER.toString(), RoleLevel.ADMIN.toString()).contains(role.getRoleLevel())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You need to be provider or admin in order to add offer");
@@ -135,39 +166,39 @@ public class OffersService {
         if (offerRequestDTO != null && offerRequestDTO.getOfferId() != null) {
             Offer offer = offerRepository.getOfferById(offerRequestDTO.getOfferId());
             Location location = offer.getLocation();
-            if (offerRequestDTO.getLocation() != null){
+            if (offerRequestDTO.getLocation() != null) {
                 LocationDTO locationDTO = offerRequestDTO.getLocation();
-                if (locationDTO.getAddress() != null){
+                if (locationDTO.getAddress() != null) {
                     location.setAddress(locationDTO.getAddress());
                 }
-                if (locationDTO.getCity() != null){
+                if (locationDTO.getCity() != null) {
                     location.setCity(locationDTO.getCity());
                 }
-                if (locationDTO.getDistrict() != null){
+                if (locationDTO.getDistrict() != null) {
                     location.setDistrict(locationDTO.getDistrict());
                 }
-                if (locationDTO.getLongitude() != null){
+                if (locationDTO.getLongitude() != null) {
                     location.setLongitude(locationDTO.getLongitude());
                 }
-                if (locationDTO.getLatitude() != null){
+                if (locationDTO.getLatitude() != null) {
                     location.setLatitude(locationDTO.getLatitude());
                 }
             }
             locationRepository.editLocation(location);
 
-            if (offerRequestDTO.getFullName() != null){
+            if (offerRequestDTO.getFullName() != null) {
                 offer.setFullName(offerRequestDTO.getFullName());
             }
-            if (offerRequestDTO.getEndDate() != null){
+            if (offerRequestDTO.getEndDate() != null) {
                 offer.setOfferEnd(DateUtil.parseDate(offerRequestDTO.getEndDate()));
             }
-            if (offerRequestDTO.getStartDate() != null){
+            if (offerRequestDTO.getStartDate() != null) {
                 offer.setOfferStart(DateUtil.parseDate(offerRequestDTO.getStartDate()));
             }
-            if (offerRequestDTO.getWage() != null){
+            if (offerRequestDTO.getWage() != null) {
                 offer.setPayment(offerRequestDTO.getWage());
             }
-            if (offerRequestDTO.getDescription() != null){
+            if (offerRequestDTO.getDescription() != null) {
                 offer.setDescription(offerRequestDTO.getDescription());
             }
             if (offerRequestDTO.getJobType() != null) {
@@ -187,4 +218,21 @@ public class OffersService {
     public void applyToOffer(Long offerId, Long userId) {
         offerRepository.applyToOffer(offerId, userId);
     }
+
+    public void removeOffer(Long offerId, User user, Role role) {
+        if (!role.getRoleLevel().equals(RoleLevel.PROVIDER.toString())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "You need to be provider or admin in order to remove offer");
+        }
+
+        Offer offer = offerRepository.getOfferById(offerId);
+
+        if (!Objects.equals(offer.getId(), user.getId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "It's not Your offer");
+        }
+
+        offer.setDeletedAt(new Date());
+        offerRepository.mergeOffer(offer);
+
+    }
+
 }
